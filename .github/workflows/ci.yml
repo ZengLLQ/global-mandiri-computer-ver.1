@@ -1,0 +1,58 @@
+name: GMC CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  rust-ci:
+    name: Rust Backend (fmt, clippy, test)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: apps/api -> target
+
+      - name: Check Formatting
+        run: cargo fmt --manifest-path apps/api/Cargo.toml --all -- --check
+
+      - name: Clippy Linter
+        run: cargo clippy --manifest-path apps/api/Cargo.toml -- -D warnings
+
+      - name: Run Tests
+        run: cargo test --manifest-path apps/api/Cargo.toml
+
+  nextjs-ci:
+    name: Next.js Frontend (lint, typecheck, build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node_version: 20
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 11
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm --filter web lint
+
+      - name: Type Check & Build
+        run: pnpm --filter web build

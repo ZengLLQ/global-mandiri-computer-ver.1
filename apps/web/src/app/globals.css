@@ -1,0 +1,392 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  
+  /* Brand Editorial Colors */
+  --color-canvas: var(--bg-canvas);
+  --color-card-bg: var(--bg-card);
+  --color-card-hover: var(--bg-card-hover);
+  --color-footer-bg: var(--bg-footer);
+  --color-hairline: var(--border-hairline);
+  --color-primary-text: var(--text-primary);
+  --color-muted-text: var(--text-muted);
+  --color-accent: var(--color-accent);
+  --color-accent-hover: var(--color-accent-hover);
+
+  /* Typography Scale Tokens */
+  --font-weight-display: 900;
+  --font-weight-heavy: 800;
+  --font-weight-bold: 700;
+  --font-weight-semibold: 600;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --font-weight-light: 300;
+  --font-weight-thin: 200;
+}
+
+:root {
+  /* Editorial Palette: Neutral Minimalist with Single Tech Cobalt Accent */
+  --bg-canvas: #FBFBF9;
+  --bg-card: #F2F1ED;
+  --bg-card-hover: #EAE8E1;
+  --bg-footer: #E8E4DC;
+  --border-hairline: #E2DFD8;
+  --text-primary: #111111;
+  --text-muted: #76746E;
+  
+  /* Single Brand Accent Color (Monochrome Editorial Black) */
+  --color-accent: #111111;
+  --color-accent-hover: #000000;
+
+  /* Global OpenType feature defaults: kerning, contextual alternates, single-storey 'a' (cv11), and open geometric glyphs (ss01) */
+  --ot-features: "calt" 1, "kern" 1, "cv11" 1, "ss01" 1;
+}
+
+/* Optional Single-Storey 'a' toggle */
+html.font-cv11 {
+  --ot-features: "calt" 1, "kern" 1, "cv11" 1, "ss01" 1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-optical-sizing: auto;
+  font-feature-settings: var(--ot-features);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* OpenType Utility Classes */
+.tnum {
+  font-feature-settings: var(--ot-features), "tnum" 1, "zero" 1;
+}
+
+.case-upper {
+  text-transform: uppercase;
+  font-feature-settings: var(--ot-features), "case" 1;
+}
+
+.open-digits {
+  font-feature-settings: var(--ot-features), "tnum" 1, "ss01" 1;
+}
+
+/* 9 Core Typography Tokens (Strictly Inter, No secondary fonts) */
+
+/* 1. DISPLAY XL: Page titles and hero */
+.text-display-xl {
+  font-size: clamp(3rem, 10vw, 8.5rem);
+  line-height: 0.90;
+  letter-spacing: -0.045em;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-feature-settings: var(--ot-features), "case" 1;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+/* 2. DISPLAY L: Section headings */
+.text-display-l {
+  font-size: clamp(2.25rem, 6vw, 5rem);
+  line-height: 0.94;
+  letter-spacing: -0.035em;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-feature-settings: var(--ot-features), "case" 1;
+  text-wrap: balance;
+}
+
+/* 3. SPEC FIGURE: Oversized spec numbers */
+.text-spec-figure {
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  line-height: 0.88;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-feature-settings: var(--ot-features), "tnum" 1, "zero" 1;
+}
+
+/* 4. OUTLINE WORDMARK: Large outlined brand name */
+.text-outline-wordmark {
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke-width: 1.5px;
+  -webkit-text-stroke-color: var(--text-primary);
+  -webkit-text-stroke: 1.5px var(--text-primary);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.text-outline-wordmark.filled,
+.group:hover .text-outline-wordmark {
+  color: var(--text-primary);
+  -webkit-text-fill-color: var(--text-primary);
+  -webkit-text-stroke-width: 0px;
+}
+
+@media (forced-colors: active) {
+  .text-outline-wordmark {
+    color: currentColor;
+    -webkit-text-stroke: 0px transparent;
+  }
+}
+
+/* 5. H3 / CARD TITLE: Product card titles */
+.text-card-title {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-feature-settings: var(--ot-features), "case" 1;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+/* 6. BODY: Body copy */
+.text-body {
+  font-size: 0.9375rem; /* 15px */
+  line-height: 1.55;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-wrap: pretty;
+  max-width: 72ch;
+}
+
+/* 7. MICRO-LABEL: Uppercase technical labels & links */
+.text-micro-label {
+  font-size: 0.6875rem; /* 11px */
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-feature-settings: var(--ot-features), "case" 1;
+}
+
+/* 8. PRICE: Tabular pricing */
+.text-price {
+  font-size: 1.0625rem; /* 17px */
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  font-feature-settings: var(--ot-features), "tnum" 1, "zero" 1;
+}
+
+.text-price .currency {
+  font-weight: 500;
+  font-size: 0.85em;
+  margin-right: 0.2em;
+}
+
+/* 9. LIGHT ACCENT: Ultra-thin contrast pair */
+.text-light-accent {
+  font-weight: 200;
+  letter-spacing: -0.03em;
+}
+
+/* 10. PORTFOLIO-INSPIRED SLANTED DISPLAY ACCENT (Breaks visual stiffness) */
+.text-slant-display {
+  font-style: italic;
+  font-weight: 800;
+  color: var(--text-muted);
+  letter-spacing: -0.03em;
+  transition: color 0.2s ease;
+}
+
+.text-slant-light {
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  opacity: 0.75;
+}
+
+.text-tech-tag {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem; /* 11px */
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Global Hyperlink Styling - Strict Black Editorial System with Utility Freedom */
+@layer base {
+  a,
+  a:visited,
+  a:active {
+    color: var(--text-primary);
+    text-decoration-color: currentColor;
+  }
+}
+
+/* Interactive Components & Layout DNA */
+.editorial-link {
+  color: var(--text-primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+  text-decoration-thickness: 1px;
+  cursor: pointer;
+  transition: opacity 0.15s ease, text-decoration-thickness 0.15s ease, color 0.15s ease;
+}
+
+.editorial-link:hover {
+  color: #000000;
+  text-decoration-thickness: 2px;
+}
+
+.editorial-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--text-primary);
+  color: #FFFFFF !important;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.85rem 1.75rem;
+  border-radius: 9999px;
+  border: 1px solid var(--text-primary);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.editorial-btn:hover {
+  background-color: #000000;
+  border-color: #000000;
+  color: #FFFFFF !important;
+}
+
+/* Universal Hover Protection: Elements turning dark/black on hover MUST display pure white text */
+[class*="hover:bg-black"]:hover,
+[class*="hover:bg-[#111111]"]:hover,
+[class*="hover:bg-[#000000]"]:hover,
+[class*="hover:bg-[#222222]"]:hover,
+[class*="hover:bg-[#262626]"]:hover,
+[class*="hover:bg-[var(--text-primary)]"]:hover,
+[class*="hover:bg-[var(--color-accent)]"]:hover {
+  color: #FFFFFF !important;
+}
+
+[class*="hover:bg-black"]:hover *,
+[class*="hover:bg-[#111111]"]:hover *,
+[class*="hover:bg-[#000000]"]:hover *,
+[class*="hover:bg-[#222222]"]:hover *,
+[class*="hover:bg-[#262626]"]:hover *,
+[class*="hover:bg-[var(--text-primary)]"]:hover *,
+[class*="hover:bg-[var(--color-accent)]"]:hover * {
+  color: #FFFFFF !important;
+}
+
+.group:hover [class*="group-hover:bg-black"],
+.group:hover [class*="group-hover:bg-[#111111]"],
+.group:hover [class*="group-hover:bg-[var(--text-primary)]"] {
+  color: #FFFFFF !important;
+}
+
+.group:hover [class*="group-hover:bg-black"] *,
+.group:hover [class*="group-hover:bg-[#111111]"] *,
+.group:hover [class*="group-hover:bg-[var(--text-primary)]"] * {
+  color: #FFFFFF !important;
+}
+
+.editorial-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.editorial-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  color: var(--text-primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.85rem 1.75rem;
+  border-radius: 9999px;
+  border: 1px solid var(--border-hairline);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.editorial-btn-outline:hover {
+  border-color: var(--text-primary);
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.editorial-card {
+  background-color: var(--bg-card);
+  border: 1px solid transparent;
+  border-radius: 1.25rem;
+  padding: 2.5rem 2rem;
+  transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.editorial-card:hover {
+  background-color: var(--bg-card-hover);
+}
+
+.hairline-divider {
+  border: 0;
+  border-top: 1px solid var(--border-hairline);
+  width: 100%;
+  margin: 0;
+}
+
+/* Portfolio-Inspired Motion & Keyframes */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes pulseDot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.7);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 35s linear infinite;
+}
+
+.animate-pulse-dot {
+  animation: pulseDot 1.8s ease-in-out infinite;
+}
+
+.marquee-track:hover .marquee-group {
+  animation-play-state: paused;
+}
+
+/* Smooth apple-designer cubic bezier transition utility */
+.transition-smooth {
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  transition-duration: 500ms;
+}
+

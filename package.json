@@ -1,0 +1,16 @@
+{
+  "name": "global-mandiri-computer",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev:web": "pnpm --filter web dev",
+    "build:web": "pnpm --filter web build",
+    "lint:web": "pnpm --filter web lint",
+    "dev:api": "cargo run --manifest-path apps/api/Cargo.toml --bin server",
+    "import:catalog": "cargo run --manifest-path apps/api/Cargo.toml --bin import_catalog -- catalog.xls",
+    "docker:up": "docker compose -f infra/docker-compose.yml up -d",
+    "docker:down": "docker compose -f infra/docker-compose.yml down",
+    "docker:build": "docker compose -f infra/docker-compose.yml build"
+  },
+  "packageManager": "pnpm@11.23.0"
+}

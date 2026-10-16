@@ -1,0 +1,27 @@
+FROM rust:1.80-slim as builder
+
+WORKDIR /usr/src/app
+RUN apt-get update && apt-get install -y pkg-config libssl-dev && rm -rf /var/lib/apt/lists/*
+
+COPY Cargo.toml ./
+COPY apps/api/Cargo.toml ./apps/api/Cargo.toml
+
+# Copy migrations and source
+COPY apps/api/migrations ./apps/api/migrations
+COPY apps/api/src ./apps/api/src
+
+ENV SQLX_OFFLINE=true
+RUN cargo build --release --manifest-path apps/api/Cargo.toml
+
+FROM debian:bookworm-slim
+RUN apt-get update && apt-get install -y ca-certificates libssl3 && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+
+COPY --from=builder /usr/src/app/target/release/server /app/server
+COPY --from=builder /usr/src/app/target/release/import_catalog /app/import_catalog
+COPY --from=builder /usr/src/app/apps/api/migrations /app/migrations
+
+RUN mkdir -p /app/uploads/proofs
+
+EXPOSE 8080
+CMD ["/app/server"]

@@ -1,0 +1,16 @@
+{
+  "name": "Global Mandiri Computer",
+  "short_name": "GMC",
+  "description": "Pusat Retailer Resmi Laptop, PC Desktop, Printer, Projector, & Starlink",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FBFBF9",
+  "theme_color": "#1447E6",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

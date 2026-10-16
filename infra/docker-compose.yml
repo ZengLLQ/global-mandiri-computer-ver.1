@@ -1,0 +1,65 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: gmc_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-gmc_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-gmc_password}
+      POSTGRES_DB: ${POSTGRES_DB:-gmc_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-gmc_user} -d ${POSTGRES_DB:-gmc_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile.api
+    container_name: gmc_api
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-gmc_user}:${POSTGRES_PASSWORD:-gmc_password}@db:5432/${POSTGRES_DB:-gmc_db}
+      PORT: 8080
+      API_HOST: 0.0.0.0
+      JWT_SECRET: ${JWT_SECRET:-gmc_super_secret_jwt_key_surabaya_2026_change_in_production}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-gmc_super_secret_refresh_key_surabaya_2026_change_in_production}
+      UPLOAD_DIR: /app/uploads/proofs
+      RUST_LOG: info,server=debug,api=debug
+      BCA_ACCOUNT_NUMBER: ${BCA_ACCOUNT_NUMBER:-1301510191}
+      BCA_ACCOUNT_HOLDER: ${BCA_ACCOUNT_HOLDER:-LILY ALI}
+      BCA_BANK_NAME: ${BCA_BANK_NAME:-Bank Central Asia (BCA)}
+    ports:
+      - "8080:8080"
+    volumes:
+      - api_uploads:/app/uploads/proofs
+
+  web:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile.web
+    container_name: gmc_web
+    restart: unless-stopped
+    depends_on:
+      - api
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8080
+      NEXT_PUBLIC_STORE_NAME: ${NEXT_PUBLIC_STORE_NAME:-Global Mandiri Computer}
+      NEXT_PUBLIC_STORE_WORDMARK: ${NEXT_PUBLIC_STORE_WORDMARK:-GMC}
+      NEXT_PUBLIC_WHATSAPP_NUMBER: ${NEXT_PUBLIC_WHATSAPP_NUMBER:-+628113225678}
+      NEXT_PUBLIC_WHATSAPP_LINK: ${NEXT_PUBLIC_WHATSAPP_LINK:-https://wa.me/628113225678}
+      NEXT_PUBLIC_STORE_EMAIL: ${NEXT_PUBLIC_STORE_EMAIL:-blessingteknologi@gmail.com}
+    ports:
+      - "3000:3000"
+
+volumes:
+  postgres_data:
+  api_uploads:

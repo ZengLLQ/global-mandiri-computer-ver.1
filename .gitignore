@@ -1,0 +1,46 @@
+# Node
+node_modules/
+.next/
+out/
+build/
+dist/
+.pnpm-store/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Rust
+/target
+apps/api/target
+**/*.rs.bk
+*.pdb
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Databases & local storage
+postgres_data/
+uploads/
+proofs/
+*.db
+*.sqlite
+
+# IDE & OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Reports & Temp Screenshots
+import_report.csv
+*.png
+.chrome_tmp/
+inspect_catalog.py
+test_stroke.html

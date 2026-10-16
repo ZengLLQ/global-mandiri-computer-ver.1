@@ -1,0 +1,9 @@
+[http]
+cainfo = "C:\\Users\\vener\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\certifi\\cacert.pem"
+check-revoke = false
+
+[net]
+git-fetch-with-cli = true
+
+[registries.crates-io]
+protocol = "git"
